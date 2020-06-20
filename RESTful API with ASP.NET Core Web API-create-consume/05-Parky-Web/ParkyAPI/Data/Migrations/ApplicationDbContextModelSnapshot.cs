@@ -64,6 +64,9 @@ namespace ParkyAPI.Migrations
                     b.Property<double>("Distance")
                         .HasColumnType("float");
 
+                    b.Property<double>("Elevation")
+                        .HasColumnType("float");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
