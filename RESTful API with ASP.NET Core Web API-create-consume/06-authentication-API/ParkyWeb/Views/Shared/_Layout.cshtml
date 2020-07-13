@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpAcc
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -27,12 +31,33 @@
                         <li class="nav-item">
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="NationalParks" asp-action="Index">National Parks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Trails" asp-action="Index">Trails</a>
-                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("test")) { 
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="NationalParks" asp-action="Index">National Parks</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Trails" asp-action="Index">Trails</a>
+                            </li>
+                        }
+
+                        @if (httpAcc.HttpContext.Session.GetString("JWToken") != null &&
+                               httpAcc.HttpContext.Session.GetString("JWToken").Length > 0)
+                        {
+                            // use loged in
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Home" asp-action="Logout">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            // user not loged in
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Home" asp-action="Login">Log in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Home" asp-action="Register">Register</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
@@ -40,6 +65,15 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["alert"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible  fade show" role="alert">
+                    @TempData["alert"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span> 
+                    </button>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>

@@ -11,7 +11,7 @@
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        @if (Model.Trail.Id != 0)
+        @if (Model.Trail != null && Model.Trail.Id != 0)
         {
             title = "Edit Trail";
             <input type="hidden" asp-for="Trail.Id" />
@@ -75,7 +75,7 @@
             <div class="form-group row">
                 <div class="col-4 offset-4">
                     <button type="submit" class="btn btn-primary form-control">
-                        @(Model.Trail.Id != 0 ? "Update" : "Create")
+                        @(Model.Trail != null && Model.Trail.Id != 0 ? "Update" : "Create")
                     </button>
                 </div>
                 <div class="col-4">
